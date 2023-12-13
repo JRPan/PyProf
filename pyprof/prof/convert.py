@@ -35,7 +35,7 @@ class Convert(OperatorLayerBase):
         self.op_ = op
 
         assert (mod == "Tensor")
-        assert (op in Convert.ops)
+        assert (op.split("_dummy_")[0] in Convert.ops)
         assert (len(args) == 1)
 
         t = args[0]
@@ -44,11 +44,11 @@ class Convert(OperatorLayerBase):
         else:  # scalar
             self.input = Tensor([], t['type'])
 
-        if op == "to":
+        if op.split("_dummy_")[0] == "to":
             # the output dtype is unknown
             self.output = self.input
         else:
-            self.output = Tensor(self.input.shape, op)
+            self.output = Tensor(self.input.shape, op.split("_dummy_")[0])
 
     def params(self):
         return str(self.input)

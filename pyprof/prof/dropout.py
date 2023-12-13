@@ -32,7 +32,7 @@ class Dropout(OperatorLayerBase):
         self.args = args
 
         assert (mod == "torch.nn.functional")
-        assert (op == "dropout")
+        assert (op.split("_dummy_")[0] == "dropout")
 
         self.inp = Tensor(args[0]['shape'], args[0]['dtype'])
         self.dir = d.dir

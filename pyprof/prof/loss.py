@@ -36,7 +36,7 @@ class MSELoss(OperatorLayerBase):
         self.args = args
 
         assert (mod == "torch.nn.functional")
-        assert (op == "mse_loss")
+        assert (op.split("_dummy_")[0] == "mse_loss")
         assert (len(args) == 3)
 
         #Get input, target and reduction

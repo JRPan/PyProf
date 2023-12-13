@@ -32,13 +32,13 @@ class OneZero(OperatorLayerBase):
     def __init__(self, d):
         mod, op, args = readMarker(d)
         assert mod in ["torch", "Tensor"]
-        assert op in OneZero.ops
+        assert op.split("_dummy_")[0] in OneZero.ops
 
         self.mod_ = mod
         self.op_ = op
 
         # For ones_like, zero_, zeros_like, the input is a tensor.
-        if op in ["ones_like", "zero_", "zeros_like"]:
+        if op.split("_dummy_")[0] in ["ones_like", "zero_", "zeros_like"]:
             assert(len(args) == 1)
             arg = args[0]
             self.input = Tensor(arg['shape'], arg['dtype'])
@@ -46,7 +46,7 @@ class OneZero(OperatorLayerBase):
         # For ones and zeros, the input can be a list, tuple, sequence of integers.
         # E.g. torch.ones((3,5,6)) or torch.ones([3,5,6]) or torch.ones(3,5,6)
         else:
-            assert op in ["ones", "zeros"]
+            assert op.split("_dummy_")[0] in ["ones", "zeros"]
             # TODO: Assume the output dtype is float
             if args[0]['type'] in ['list', 'tuple']:
                 assert(len(args) == 1)
@@ -86,7 +86,7 @@ class Fill(OperatorLayerBase):
     def __init__(self, d):
         mod, op, args = readMarker(d)
         assert mod == "Tensor"
-        assert op == "fill_"
+        assert op.split("_dummy_")[0] == "fill_"
 
         self.mod_ = mod
         self.op_ = op
@@ -122,7 +122,7 @@ class Full(OperatorLayerBase):
     def __init__(self, d):
         mod, op, args = readMarker(d)
         assert mod == "torch"
-        assert op == "full"
+        assert op.split("_dummy_")[0] == "full"
 
         self.mod_ = mod
         self.op_ = op

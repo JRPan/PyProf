@@ -71,126 +71,128 @@ def findFpropKernel(seq):
 
 
 def foo(mod, op, d):
-    if (op[0] == "linear"):
+    op_0 = op[0].split("_dummy_")[0]
+    if (op_0 == "linear"):
         xx = Linear(d)
 
     # rnncell, lstmcell, grucell
-    elif (mod[0] in ["LSTMCell", "GRUCell"]) and (op[0] == "forward"):
+    elif (mod[0] in ["LSTMCell", "GRUCell"]) and (op_0 == "forward"):
         xx = RNNCell(d)
 
-    elif op[0] in [
+    elif op_0 in [
             "conv1d",
             "conv2d",
     ]:
         xx = Conv(d)
 
-    elif (op[0] in Pointwise.ops):
+    elif (op_0 in Pointwise.ops):
+    
         xx = Pointwise(d)
 
-    elif (op[0] in Convert.ops):
+    elif (op_0 in Convert.ops):
         xx = Convert(d)
 
-    elif op[0] in ["__matmul__", "matmul"]:
+    elif op_0 in ["__matmul__", "matmul"]:
         xx = Matmul(d)
 
-    elif op[0] == "embedding":
+    elif op_0 == "embedding":
         xx = Embedding(d)
 
     #reduction
-    elif op[0] == "sum":
+    elif op_0 == "sum":
         xx = Sum(d)
 
-    elif op[0] == "mean":
+    elif op_0 == "mean":
         xx = Mean(d)
 
-    elif op[0] == "norm":
+    elif op_0 == "norm":
         xx = Norm(d)
 
-    elif op[0] == "dropout":
+    elif op_0 == "dropout":
         xx = Dropout(d)
 
     #Index, Slice, Join, Mutate
-    elif (op[0] == "cat"):
+    elif (op_0 == "cat"):
         xx = Cat(d)
 
-    elif (op[0] == "reshape"):
+    elif (op_0 == "reshape"):
         xx = Reshape(d)
 
-    elif (op[0] == "masked_scatter_"):
+    elif (op_0 == "masked_scatter_"):
         xx = MaskedScatter(d)
 
-    elif (op[0] == "gather"):
+    elif (op_0 == "gather"):
         xx = Gather(d)
 
-    elif (op[0] == "nonzero"):
+    elif (op_0 == "nonzero"):
         xx = Nonzero(d)
 
-    elif (op[0] == "index_select"):
+    elif (op_0 == "index_select"):
         xx = IndexSelect(d)
 
-    elif (op[0] == "masked_select"):
+    elif (op_0 == "masked_select"):
         xx = MaskedSelect(d)
 
     #blas
-    elif op[0] in ["addmm", "addmm_"]:
+    elif op_0 in ["addmm", "addmm_"]:
         xx = Addmm(d)
 
-    elif op[0] == "mm":
+    elif op_0 == "mm":
         xx = Mm(d)
 
-    elif op[0] == "bmm":
+    elif op_0 == "bmm":
         xx = Bmm(d)
 
     #softmax
-    elif op[0] == "softmax":
+    elif op_0 == "softmax":
         xx = Softmax(d)
 
-    elif op[0] == "log_softmax":
+    elif op_0 == "log_softmax":
         xx = LogSoftmax(d)
 
     #loss
-    elif op[0] == "mse_loss":
+    elif op_0 == "mse_loss":
         xx = MSELoss(d)
 
     #optimizers
-    elif op[0] == "adam":
+    elif op_0 == "adam":
         xx = Adam(d)
 
     #normalization
-    elif op[0] == "batch_norm":
+    elif op_0 == "batch_norm":
         xx = BatchNorm(d)
 
     #random
-    elif op[0] == "randperm":
+    elif op_0 == "randperm":
         xx = RandPerm(d)
 
     #memory
-    elif op[0] in OneZero.ops:
+    elif op_0 in OneZero.ops:
         xx = OneZero(d)
 
-    elif op[0] == "fill_":
+    elif op_0 == "fill_":
         xx = Fill(d)
 
-    elif op[0] == "full":
+    elif op_0 == "full":
         xx = Full(d)
 
     #misc
-    elif op[0] == "copy_":
+    elif op_0 == "copy_":
         xx = Copy(d)
 
-    elif op[0] == "clone":
+    elif op_0 == "clone":
         xx = Clone(d)
 
-    elif op[0] == "contiguous":
+    elif op_0 == "contiguous":
         xx = Contiguous(d)
 
-    elif op[0] == "any":
+    elif op_0 == "any":
         xx = Any(d)
 
-    elif (op[0] in Activation.ops):
+    elif (op_0 in Activation.ops):
         xx = Activation(d)
 
-    elif op[0] == "to":
+    elif op_0 == "to":
         xx = Convert(d)
 
     else:

@@ -87,7 +87,7 @@ class Linear(OperatorLayerBase):
         self.k = k
 
     def tc(self):
-        if self.op() == "linear":
+        if self.op().split("_dummy_")[0] == "linear":
             if self.name in TC_Whitelist():
                 return 1
             return 0
@@ -105,7 +105,7 @@ class Linear(OperatorLayerBase):
         args = marker['args']
 
         assert (mod == "torch.nn.functional")
-        assert (op == "linear")
+        assert (op.split("_dummy_")[0] == "linear")
 
         self.setXWBMNK(args)
 

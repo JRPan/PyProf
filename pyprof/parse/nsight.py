@@ -231,7 +231,7 @@ class Nsight(object):
 
             if ("mod" in m) and ("op" in m) and ("args" in m) and ("type" in m):
                 m_dict = eval(m)
-                m_dict['op'] = m_dict['op'] + "_" + str(layer_starttime) + "_" + str(layer_endtime)
+                m_dict['op'] = m_dict['op'] + "_dummy_" + str(layer_starttime) + "_" + str(layer_endtime)
                 pyprofMarkers.append(str(m_dict))
             elif ("layer:" in m):
                 layerMarkers.append(m)

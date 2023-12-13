@@ -31,7 +31,7 @@ class Embedding(OperatorLayerBase):
         self.op_ = op
 
         assert (mod == "torch.nn.functional")
-        assert (op == "embedding")
+        assert (op.split("_dummy_")[0] == "embedding")
 
         input = args[0]
         embedding = args[1]

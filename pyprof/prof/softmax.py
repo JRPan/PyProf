@@ -31,7 +31,7 @@ class Softmax(OperatorLayerBase):
         self.op_ = op
 
         assert (mod == "torch.nn.functional")
-        assert (op == "softmax")
+        assert (op.split("_dummy_")[0] == "softmax")
 
         #Filter out named parameters
         args = list(filter(lambda x: x['name'] == '', args))
@@ -84,7 +84,7 @@ class LogSoftmax(OperatorLayerBase):
         self.op_ = op
 
         assert (mod in ["torch", "Tensor", "torch.nn.functional"])
-        assert (op == "log_softmax")
+        assert (op.split("_dummy_")[0] == "log_softmax")
 
         #Filter out named parameters
         args = list(filter(lambda x: x['name'] == '', args))

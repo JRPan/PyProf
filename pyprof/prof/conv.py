@@ -70,7 +70,7 @@ class Conv(OperatorLayerBase):
         self.sub = d.sub
 
         assert (mod == "torch.nn.functional")
-        assert (op in ["conv1d", "conv2d"])
+        assert (op.split("_dummy_")[0] in ["conv1d", "conv2d"])
         length = len(args)
         assert (length >= 2) and (length <= 7)
         i, w = args[0], args[1]
@@ -107,7 +107,7 @@ class Conv(OperatorLayerBase):
         else:
             g = {'name': 'groups', 'type': 'int', 'value': 1}
 
-        if op == "conv1d":
+        if op.split("_dummy_")[0] == "conv1d":
             assert (len(i['shape']) == 3)
             assert (len(w['shape']) == 3)
             assert (i['dtype'] == w['dtype'])
@@ -149,7 +149,7 @@ class Conv(OperatorLayerBase):
             self.g = g
             self.type = i['dtype']
 
-        elif op == "conv2d":
+        elif op.split("_dummy_")[0] == "conv2d":
             assert (len(i['shape']) == 4)
             assert (len(w['shape']) == 4)
             assert (i['dtype'] == w['dtype'])

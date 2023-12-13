@@ -35,7 +35,7 @@ class Cat(OperatorLayerBase):
         self.op_ = op
 
         assert (mod == "torch")
-        assert (op == "cat")
+        assert (op.split("_dummy_")[0] == "cat")
         assert (len(args) >= 2)
 
         dtype = args[0]['dtype']
@@ -87,7 +87,7 @@ class Reshape(OperatorLayerBase):
         self.args = args
 
         assert (mod == "Tensor")
-        assert (op == "reshape")
+        assert (op.split("_dummy_")[0] == "reshape")
 
         #Temporarily commenting three lines
         #assert (len(args) == 2)
@@ -133,7 +133,7 @@ class Gather(OperatorLayerBase):
         self.args = args
 
         assert (mod == "Tensor") or (mod == "torch")
-        assert (op == "gather")
+        assert (op.split("_dummy_")[0] == "gather")
 
         #Filter out the "out" parameter
         args = list(filter(lambda x: x['name'] != 'out', args))
@@ -184,7 +184,7 @@ class MaskedScatter(OperatorLayerBase):
         self.args = args
 
         assert (mod == "Tensor")
-        assert (op == "masked_scatter_")
+        assert (op.split("_dummy_")[0] == "masked_scatter_")
         assert (len(args) == 3)
 
         dst, mask, src = args
@@ -242,7 +242,7 @@ class Nonzero(OperatorLayerBase):
         self.args = args
 
         assert (mod in ["torch", "Tensor"])
-        assert (op == "nonzero")
+        assert (op.split("_dummy_")[0] == "nonzero")
         assert (len(args) == 1)
 
         arg = args[0]
@@ -297,7 +297,7 @@ class IndexSelect(OperatorLayerBase):
         self.args = args
 
         assert (mod == "Tensor") or (mod == "torch")
-        assert (op == "index_select")
+        assert (op.split("_dummy_")[0] == "index_select")
 
         #Filter out the "out" parameter
         args = list(filter(lambda x: x['name'] != 'out', args))
@@ -383,7 +383,7 @@ class MaskedSelect(OperatorLayerBase):
         self.sub = d.sub
 
         assert (mod == "Tensor") or (mod == "torch")
-        assert (op == "masked_select")
+        assert (op.split("_dummy_")[0] == "masked_select")
 
         #Filter out the "out" parameter
         args = list(filter(lambda x: x['name'] != 'out', args))

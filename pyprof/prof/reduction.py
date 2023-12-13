@@ -33,7 +33,7 @@ class Mean(OperatorLayerBase):
         self.op_ = op
 
         assert (mod in ["torch", "Tensor"])
-        assert (op == "mean")
+        assert (op.split("_dummy_")[0] == "mean")
 
         #Filter out named parameters
         args = list(filter(lambda x: x['name'] == '', args))
@@ -90,7 +90,7 @@ class Sum(OperatorLayerBase):
         self.args = args
 
         assert (mod in ["torch", "Tensor"])
-        assert (op == "sum")
+        assert (op.split("_dummy_")[0] == "sum")
         assert (len(args) >= 1)
 
         #Get input
@@ -145,7 +145,7 @@ class Norm(OperatorLayerBase):
         self.args = args
 
         assert (mod in ["torch", "Tensor"])
-        assert (op == "norm")
+        assert (op.split("_dummy_")[0] == "norm")
         #assert (len(args) == 1)
         i = args[0]
         self.shape = i['shape']

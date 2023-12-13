@@ -30,7 +30,7 @@ class BatchNorm(OperatorLayerBase):
         self.mod_ = mod
         self.op_ = op
 
-        assert (op == "batch_norm")
+        assert (op.split("_dummy_")[0] == "batch_norm")
         assert (len(args) >= 1)
         i = args[0]
         assert (i['type'] == "tensor")

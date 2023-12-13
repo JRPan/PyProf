@@ -81,7 +81,7 @@ class Copy(OperatorLayerBase):
         self.args = args
 
         assert (mod == "Tensor")
-        assert (op == "copy_")
+        assert (op.split("_dummy_")[0] == "copy_")
         assert (len(args) == 2)
 
         dst, src = args
@@ -130,7 +130,7 @@ class Clone(OperatorLayerBase):
         self.args = args
 
         assert (mod == "Tensor")
-        assert (op == "clone")
+        assert (op.split("_dummy_")[0] == "clone")
         assert (len(args) == 1)
         t = args[0]
         self.shape = t['shape']
@@ -173,7 +173,7 @@ class Contiguous(OperatorLayerBase):
         self.args = args
 
         assert (mod == "Tensor")
-        assert (op == "contiguous")
+        assert (op.split("_dummy_")[0] == "contiguous")
         assert (len(args) == 1)
         t = args[0]
         self.shape = t['shape']
@@ -213,7 +213,7 @@ class Any(OperatorLayerBase):
         self.args = args
 
         assert (mod == "Tensor")
-        assert (op == "any")
+        assert (op.split("_dummy_")[0] == "any")
         assert (len(args) in [1,2])
         t = args[0]
         # The input can be a tensor or scalar

@@ -105,7 +105,7 @@ class Pointwise(OperatorLayerBase):
 
         self.dir = d.dir
         assert (d.dir in ["fprop", "bprop"])
-        assert (op in Pointwise.ops)
+        assert (op.split("_dummy_")[0] in Pointwise.ops)
 
         # Filter out all named parameters (kwargs).
         # This might require revisiting in future.
@@ -144,20 +144,20 @@ class Pointwise(OperatorLayerBase):
         b = f = 0
 
         # Unary
-        if self.op() in Pointwise.unary + Pointwise.representation:
+        if self.op().split("_dummy_")[0] in Pointwise.unary + Pointwise.representation:
             # Relaxing assert. clamp has > 1 input arguments.
             assert (len(self.input) >= 1)
             b = 2 * self.input[0].bytes
             f = self.input[0].size
 
-        elif self.op() in Pointwise.exp_log + Pointwise.trig_trans + \
+        elif self.op().split("_dummy_")[0] in Pointwise.exp_log + Pointwise.trig_trans + \
                 Pointwise.sqrt + Pointwise.error:
             assert (len(self.input) == 1)
             b = 2 * self.input[0].bytes
             f = self.input[0].size * 20 # estimate
 
         # Binary
-        elif self.op() in Pointwise.comp + \
+        elif self.op().split("_dummy_")[0] in Pointwise.comp + \
                 Pointwise.binary + Pointwise.ibinary + \
                 Pointwise.logical + Pointwise.ilogical:
 
@@ -167,22 +167,22 @@ class Pointwise(OperatorLayerBase):
             if self.dir == "fprop":
                 b = reduce(operator.add, [t.bytes for t in self.input])
                 # The output of comparison is bool
-                if self.op() in Pointwise.comp:
+                if self.op().split("_dummy_")[0] in Pointwise.comp:
                     out = Tensor(out.shape, "bool")
                 b += out.bytes
                 f = out.size
             else:
-                if (self.op() in ["add", "__add__", "sub", "__sub__", "__isub__"]):
+                if (self.op().split("_dummy_")[0] in ["add", "__add__", "sub", "__sub__", "__isub__"]):
                     b = 2 * out.bytes
                     f = 0
-                elif (self.op() in ["__mul__", "__imul__", "__rmul__", "div", "__truediv__"]):
+                elif (self.op().split("_dummy_")[0] in ["__mul__", "__imul__", "__rmul__", "div", "__truediv__"]):
                     b = 3 * out.bytes
                     f = out.size
                 else:
-                    e = f'{self.op()} bprop not supported yet. Please file a bug.'
+                    e = f'{self.op().split("_dummy_")[0]} bprop not supported yet. Please file a bug.'
                     assert False, e
 
-        elif self.op() in Pointwise.power:
+        elif self.op().split("_dummy_")[0] in Pointwise.power:
             assert (len(self.input) == 2)
             out = Tensor.broadcast(self.input)
             b = reduce(operator.add, [t.bytes for t in self.input])
@@ -190,7 +190,7 @@ class Pointwise(OperatorLayerBase):
             f = out.size * 20 # estimate
 
         # Ternary
-        elif self.op() in Pointwise.ternary:
+        elif self.op().split("_dummy_")[0] in Pointwise.ternary:
             # Remove scalars
             tensors = list(filter(lambda x: x.shape != [], self.input))
             assert len(tensors) == 3
@@ -200,7 +200,7 @@ class Pointwise(OperatorLayerBase):
             f = 3 * out.size
 
         else:
-            e = f'{self.op()} not supported yet. Please file a bug.'
+            e = f'{self.op().split("_dummy_")[0]} not supported yet. Please file a bug.'
             assert False, e
 
         return b, f

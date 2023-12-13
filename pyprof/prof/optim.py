@@ -36,7 +36,7 @@ class Adam(OperatorLayerBase):
         self.args = args
         self.sub = d.sub
 
-        assert (op == "adam")
+        assert (op.split("_dummy_")[0] == "adam")
         assert (len(args) == 12) or (len(args) == 14)
         w, hw, m, v, g = args[0:5]
         assert (w['shape'] == m['shape'] == v['shape'] == g['shape'])

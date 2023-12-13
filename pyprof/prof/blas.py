@@ -39,7 +39,7 @@ class Addmm(OperatorLayerBase):
             "torch",
             "Tensor",
         ])
-        assert (op in [
+        assert (op.split("_dummy_")[0] in [
             "addmm",
             "addmm_",
         ])
@@ -119,7 +119,7 @@ class Bmm(OperatorLayerBase):
         self.op_ = op
         self.args = args
 
-        assert (mod == "torch") and (op == "bmm")
+        assert (mod == "torch") and (op.split("_dummy_")[0] == "bmm")
 
         #Filter out named params (kwargs)
         args = list(filter(lambda x: x['name'] == "", args))
@@ -186,7 +186,7 @@ class Matmul(OperatorLayerBase):
         self.name = d.name
         self.sub = d.sub
 
-        assert ((mod == "torch") and (op == "matmul")) or ((mod == "Tensor") and (op == "__matmul__"))
+        assert ((mod == "torch") and (op.split("_dummy_")[0] == "matmul")) or ((mod == "Tensor") and (op.split("_dummy_")[0] == "__matmul__"))
         assert (len(args) == 2)
 
         assert any([x in d.name for x in Matmul.NON_TC + ["gemm", "gemv"]])
@@ -318,7 +318,7 @@ class Mm(OperatorLayerBase):
         self.op_ = op
         self.args = args
 
-        assert (mod == "torch") and (op == "mm")
+        assert (mod == "torch") and (op.split("_dummy_")[0] == "mm")
         assert (len(args) == 2)
 
         A, B = args

@@ -60,7 +60,7 @@ class RNNCell(OperatorLayerBase):
         self.sub = d.sub
         self.grid = d.grid
 
-        assert (op == "forward")
+        assert (op.split("_dummy_")[0] == "forward")
         assert (mod in ["LSTMCell", "GRUCell", "RNNCell"])
         assert (len(args) in [2, 3])
 

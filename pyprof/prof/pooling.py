@@ -37,7 +37,7 @@ class MaxPool2d(object):
         op = marker['op']
         args = marker['args']
         assert (mod == "torch.nn.functional")
-        assert (op == "max_pool2d")
+        assert (op.split("_dummy_")[0] == "max_pool2d")
         assert (len(args) >= 2)
 
         #input
