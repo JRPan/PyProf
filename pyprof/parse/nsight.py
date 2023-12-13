@@ -208,7 +208,7 @@ class Nsight(object):
             return mlist
 
         #Find all encapsulating markers
-        cmd = 'SELECT text from marker where \
+        cmd = 'SELECT start,end,text from marker where \
 				globalTid = {} and \
 				start < {} and \
 				end > {} \
@@ -219,6 +219,8 @@ class Nsight(object):
         for r in result:
             #m = self.getString(r['name'])
             m = r['text']
+            layer_starttime = r['start']
+            layer_endtime = r['end']
 
             #Hack: If its a known gradient checkpointing marker, ignore it.
             if m.find("CheckpointFunctionBackward") >= 0:
@@ -228,7 +230,9 @@ class Nsight(object):
                 bprop = True
 
             if ("mod" in m) and ("op" in m) and ("args" in m) and ("type" in m):
-                pyprofMarkers.append(m)
+                m_dict = eval(m)
+                m_dict['op'] = m_dict['op'] + "_" + str(layer_starttime) + "_" + str(layer_endtime)
+                pyprofMarkers.append(str(m_dict))
             elif ("layer:" in m):
                 layerMarkers.append(m)
             elif ("traceMarker" in m):
